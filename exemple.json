@@ -1,0 +1,49 @@
+{
+    "notification_type": 0,
+    "data": {
+        "map_size": 10,
+        "game_status": 1,
+        "players": [
+            {
+                "name": "p1",
+                "x": 2,
+                "y": 2,
+                "energy": 98,
+                "looking": 3
+            },
+            {
+                "name": "p2",
+                "x": 9,
+                "y": 2,
+                "energy": 98,
+                "looking": 3
+            },
+            {
+                "name": "p3",
+                "x": 2,
+                "y": 9,
+                "energy": 98,
+                "looking": 1
+            },
+            {
+                "name": "p4",
+                "x": 9,
+                "y": 9,
+                "energy": 98,
+                "looking": 3
+            }
+        ],
+        "energy_cells": [
+            {
+                "x": 0,
+                "y": 0,
+                "value": 5
+            },
+            {
+                "x": 0,
+                "y": 0,
+                "value": 5
+            }
+        ]
+    }
+}
