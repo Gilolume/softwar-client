@@ -24,23 +24,34 @@ LOOKING = 0 # (left = 0, up = 1, right = 2, down = 3)
 def convertToJson(notification):
     return json.loads(notification)
 
+def getOrientation(looking):
+    #left = 0, up = 1, right = 2, down = 3
+    if looking == 0:
+        return 90
+    elif looking == 1:
+        return 0
+    elif looking == 2:
+        return 270
+    else:
+        return 180
+
 def generateMap(map_size):
     tile_map = []
     for row in range(map_size):
         new_row = []
         for column in range(map_size):
-            new_row.append(GROUND)
+            new_row.append({"type": "ground", "color":GROUND})
         tile_map.append(new_row)
     return tile_map
 
 def insertPlayers(tile_map, players):
     for player in players:
-        tile_map[player['x'] - 1][player['y'] - 1] = PLAYER
+        tile_map[player['x'] - 1][player['y'] - 1] = {"type": "player", "data":player}
     return tile_map
 
 def insertEnergyCells(tile_map, energy_cells):
     for energy_cell in energy_cells:
-        tile_map[energy_cell['x'] - 1][energy_cell['y'] - 1] = ENERGY_CELL
+        tile_map[energy_cell['x'] - 1][energy_cell['y'] - 1] = {"type": "energy_cell", "data":energy_cell}
     return tile_map
 
 def drawMap(pygame, data):
@@ -51,10 +62,11 @@ def drawMap(pygame, data):
     display = pygame.display.set_mode((map_size*TILE_SIZE,map_size*TILE_SIZE))
     for row in range(map_size):
         for column in range(map_size):
-            if tile_map[row][column] == GROUND:
-                pygame.draw.rect(display, tile_map[row][column], (column*TILE_SIZE, row*TILE_SIZE, TILE_SIZE, TILE_SIZE))
-            elif tile_map[row][column] == PLAYER:
-                display.blit(PLAYER, (column*TILE_SIZE, row*TILE_SIZE))
+            if tile_map[row][column]['type'] == "ground":
+                pygame.draw.rect(display, tile_map[row][column]['color'], (column*TILE_SIZE, row*TILE_SIZE, TILE_SIZE, TILE_SIZE))
+            elif tile_map[row][column]['type'] == "player":
+                playerOriented = pygame.transform.rotate(PLAYER, getOrientation(tile_map[row][column]['data']['looking']))
+                display.blit(playerOriented, (column*TILE_SIZE, row*TILE_SIZE))
             else:
                 display.blit(ENERGY_CELL, (column*TILE_SIZE, row*TILE_SIZE))
 
