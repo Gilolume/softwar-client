@@ -47,10 +47,6 @@ def quitgame():
 	pygame.quit()
 	quit()
 
-def callserver():
-	testZMQ.zmqTry()
-
-
 
 def exec_forward():
     if send_forward() == True:
@@ -94,8 +90,8 @@ def exec_rightwd():
             return 180
 
 def send_forward():
+    testZMQ.sendcommand('identify|#0x01')
     time.sleep(.500)
-    #Pas true ou false mais recup directement le json avec les infos > le parser > et mettre à jour la position par rapport au json
     return True
 def send_backward():
     time.sleep(.500)
@@ -137,13 +133,6 @@ while not gameExit:
                 quit()
                 
         display.fill(WHITE)
-
-
-        #
-        #C'est dans cette boucle qu'on parse les json pour déterminer la position de tout les joueurs et toutes les capsules
-        #d'énergie. et dans un for placer après l'affichage des élement de la map on va asombrire le terrain par rapport au champ 
-        #de vision
-        #
 
         #button("Call server",150,450,100,50,GREEN,BRIGHT_GREEN,callserver)
         #button("Quit",550,450,100,50,RED,BRIGHT_RED,quitgame)
