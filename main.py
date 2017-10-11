@@ -15,8 +15,6 @@ GROUND = (0, 0, 0)
 #End Map texture
 
 #Coord
-POS_X = 0
-POS_Y = 90
 TILE_SIZE = 50 #Toujours egal a player_size -> juste nom plus evident 
 LOOKING = 0 # (left = 0, up = 1, right = 2, down = 3)
 #End Coord
@@ -70,6 +68,19 @@ def drawMap(pygame, data):
             else:
                 display.blit(ENERGY_CELL, (column*TILE_SIZE, row*TILE_SIZE))
 
+def drawMessageStart(pygame):
+    display = pygame.display.set_mode((500,500))
+    myFont = pygame.font.SysFont("Impact", 50)
+    gameStartInfo = myFont.render("Game start", 1, (255,255,255))
+    display.blit(gameStartInfo, (160, 200))
+
+def drawMessageEnd(pygame):
+    #display = pygame.display.set_mode((500,500))
+    display = pygame.display.get_surface()
+    myFont = pygame.font.SysFont("Impact", 50)
+    gameStartInfo = myFont.render("Game End", 1, (255,255,255))
+    display.blit(gameStartInfo, (160, 200))
+
 pygame.init()
 PLAYER = pygame.image.load("bunny50.png")
 ENERGY_CELL = pygame.image.load("energy_max50.png")
@@ -77,19 +88,24 @@ clock = pygame.time.Clock()
 socket = myZmqFunc.connectToPubServer("12345")
 run = True
 while run:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            sys.exit()
     notification = convertToJson(myZmqFunc.getNotification(socket))
-    if notification['notification_type'] == 0:
+    print(notification['notification_type'])
+    if notification['notification_type'] == 10:
         drawMap(pygame, notification['data'])
     elif notification['notification_type'] == 1:
-        print("En attente de joueurs")
+        print("Enter elif type 1")
+        drawMessageStart(pygame)
     elif notification['notification_type'] == 2:
         print("Un seul client est encore en vie")
+        drawMessageEnd(pygame)
     elif notification['notification_type'] == 3:
         print("Mort d'un client")
     elif notification['notification_type'] == 4:
         print("Victoire d'un client")
 
-    #player = pygame.transform.rotate(image_player, direction)
-    #display.blit(player, (pos_x, pos_y))
+ 
     pygame.display.update()
     #clock.tick(15)
