@@ -6,6 +6,8 @@ import json
 import pygame
 import myZmqFunc
 
+import ia
+
 #Color
 BLUE = (0,0,200)
 BLACK = (0,0,0)
@@ -70,42 +72,46 @@ def drawMap(pygame, data):
 
 def drawMessageStart(pygame):
     display = pygame.display.set_mode((500,500))
-    myFont = pygame.font.SysFont("Impact", 50)
-    gameStartInfo = myFont.render("Game start", 1, (255,255,255))
-    display.blit(gameStartInfo, (160, 200))
+    my_font = pygame.font.SysFont("Impact", 50)
+    message = my_font.render("Game start", 1, (255,255,255))
+    display.blit(message, (160, 200))
 
 def drawMessageEnd(pygame):
     #display = pygame.display.set_mode((500,500))
     display = pygame.display.get_surface()
-    myFont = pygame.font.SysFont("Impact", 50)
-    gameStartInfo = myFont.render("Game End", 1, (255,255,255))
-    display.blit(gameStartInfo, (160, 200))
+    my_font = pygame.font.SysFont("Impact", 50)
+    message = my_font.render("Game End", 1, (255,255,255))
+    display.blit(message, (160, 200))
 
 pygame.init()
 PLAYER = pygame.image.load("bunny50.png")
 ENERGY_CELL = pygame.image.load("energy_max50.png")
 clock = pygame.time.Clock()
-socket = myZmqFunc.connectToPubServer("12345")
+#socket_sub = myZmqFunc.connectToPubServer("12345")
+socket_req = myZmqFunc.connectToReqServer("4242")
+ia.play(socket_req)
 run = True
 while run:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             sys.exit()
-    notification = convertToJson(myZmqFunc.getNotification(socket))
-    print(notification['notification_type'])
-    if notification['notification_type'] == 10:
-        drawMap(pygame, notification['data'])
-    elif notification['notification_type'] == 1:
-        print("Enter elif type 1")
-        drawMessageStart(pygame)
-    elif notification['notification_type'] == 2:
-        print("Un seul client est encore en vie")
-        drawMessageEnd(pygame)
-    elif notification['notification_type'] == 3:
-        print("Mort d'un client")
-    elif notification['notification_type'] == 4:
-        print("Victoire d'un client")
+    #notification = convertToJson(myZmqFunc.getNotification(socket_sub))
+    #print(notification['notification_type'])
+    #if notification['notification_type'] == 0:
+    #    drawMap(pygame, notification['data'])
+    #elif notification['notification_type'] == 1:
+    #    print("Enter elif type 1")
+    #    drawMessageStart(pygame)
+    #elif notification['notification_type'] == 2:
+    #    print("Un seul client est encore en vie")
+    #    drawMessageEnd(pygame)
+    #elif notification['notification_type'] == 3:
+    #    print("Mort d'un client")
+    #elif notification['notification_type'] == 4:
+    #    print("Victoire d'un client")
+
+
 
  
-    pygame.display.update()
+    #pygame.display.update()
     #clock.tick(15)
